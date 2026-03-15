@@ -2,38 +2,38 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { ShoppingBag, Mail, Lock, User, ArrowRight } from 'lucide-react';
+import { useToastStore } from '../store/toastStore';
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
   const { signUp, isConfigured } = useAuth();
   const navigate = useNavigate();
+  const showToast = useToastStore((state) => state.showToast);
 
   const handleRegister = async (e) => {
     e.preventDefault();
     if (!isConfigured) {
-      setError('Vui lòng cấu hình Supabase URL và API Key trong file .env để sử dụng tính năng này.');
+      showToast('Vui lòng cấu hình Supabase URL và API Key trong file .env.', 'error');
       return;
     }
-    setError('');
     setLoading(true);
 
     const { error } = await signUp(email, password, { full_name: fullName });
 
     if (error) {
       if (error.message.includes('rate limit')) {
-        setError('Hệ thống đang tạm thời giới hạn gửi email (tối đa 3 email/giờ). Vui lòng thử lại sau hoặc liên hệ Admin để tắt tính năng xác nhận email.');
+        showToast('Hệ thống đang tạm thời giới hạn gửi email (tối đa 3 email/giờ).', 'error');
       } else {
-        setError(error.message);
+        showToast(error.message, 'error');
       }
       setLoading(false);
     } else {
       // Registration successful
-      alert('Đăng ký thành công! Vui lòng kiểm tra email để xác nhận tài khoản.');
+      showToast('Đăng ký thành công! Vui lòng kiểm tra email để xác nhận tài khoản.', 'success');
       navigate('/login');
     }
   };
@@ -60,11 +60,6 @@ const RegisterPage = () => {
           </div>
 
           <form onSubmit={handleRegister} className="space-y-6">
-            {error && (
-              <div className="bg-red-50 text-red-500 p-4 rounded-2xl text-sm font-bold text-center border border-red-100 italic">
-                {error}
-              </div>
-            )}
 
             <div>
               <label className="block text-xs font-black text-primary/40 uppercase tracking-widest mb-2 ml-1">Họ và tên</label>
