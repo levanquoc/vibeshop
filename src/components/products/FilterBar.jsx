@@ -25,7 +25,7 @@ const FilterBar = ({
               onClick={() => onSelectCategory('all')}
               className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all whitespace-nowrap relative ${
                 selectedCategory === 'all'
-                  ? 'text-white'
+                  ? 'bg-primary text-white shadow-xl shadow-primary/20'
                   : 'bg-white text-slate-500 hover:bg-slate-50 border border-slate-100'
               }`}
             >
@@ -46,7 +46,7 @@ const FilterBar = ({
                 onClick={() => onSelectCategory(cat)}
                 className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all capitalize whitespace-nowrap relative ${
                   selectedCategory === cat
-                    ? 'text-white'
+                    ? 'bg-primary text-white shadow-xl shadow-primary/20'
                     : 'bg-white text-slate-500 hover:bg-slate-50 border border-slate-100'
                 }`}
               >
