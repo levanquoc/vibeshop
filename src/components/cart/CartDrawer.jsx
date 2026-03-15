@@ -1,5 +1,6 @@
-import { X, ShoppingBag, Plus, Minus, Trash2, ArrowRight } from 'lucide-react';
+import { X, ShoppingBag, Plus, Minus, Trash2, ArrowRight, Fullscreen } from 'lucide-react';
 import { useCartStore } from '../../store/cartStore';
+import { Link } from 'react-router-dom';
 
 const CartDrawer = ({ isOpen, onClose }) => {
   const { cart, removeFromCart, updateQuantity, getTotalPrice } = useCartStore();
@@ -94,14 +95,25 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
         {/* Footer */}
         {cart.length > 0 && (
-          <div className="p-8 border-t border-slate-100 bg-slate-50/50">
-            <div className="flex items-center justify-between mb-6">
+          <div className="p-8 border-t border-slate-100 bg-slate-50/50 space-y-3">
+            <div className="flex items-center justify-between mb-3">
               <span className="text-slate-500 font-bold">Tổng cộng:</span>
               <span className="text-3xl font-black text-primary">${getTotalPrice()}</span>
             </div>
-            <button className="w-full bg-primary text-white py-5 rounded-2xl font-black hover:bg-primary-light transition-all shadow-xl shadow-primary/20 flex items-center justify-center gap-3">
+            <Link 
+              to="/cart" 
+              onClick={onClose}
+              className="w-full bg-primary text-white py-5 rounded-2xl font-black hover:bg-primary-light transition-all shadow-xl shadow-primary/20 flex items-center justify-center gap-3"
+            >
                Thanh toán ngay <ArrowRight size={20} />
-            </button>
+            </Link>
+            <Link 
+              to="/cart" 
+              onClick={onClose}
+              className="w-full bg-white text-primary border-2 border-primary/10 py-4 rounded-2xl font-bold hover:bg-slate-50 transition-all flex items-center justify-center gap-2"
+            >
+               Xem giỏ hàng chi tiết
+            </Link>
           </div>
         )}
       </div>
