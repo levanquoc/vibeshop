@@ -9,11 +9,15 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
-  const { signIn } = useAuth();
+  const { signIn, isConfigured } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!isConfigured) {
+      setError('Vui lòng cấu hình Supabase URL và API Key trong file .env để sử dụng tính năng này.');
+      return;
+    }
     setError('');
     setLoading(true);
 
@@ -31,6 +35,14 @@ const LoginPage = () => {
     <div className="min-h-screen pt-32 pb-20 bg-slate-50/50 flex items-center justify-center">
       <div className="container mx-auto px-6">
         <div className="max-w-md mx-auto bg-white rounded-[48px] shadow-sm border border-slate-100 p-10 md:p-12">
+          {/* Configuration Warning */}
+          {!isConfigured && (
+            <div className="mb-8 p-4 bg-amber-50 border border-amber-100 rounded-2xl text-amber-700 text-sm font-bold flex flex-col gap-2 italic">
+               <p>⚠️ Supabase chưa được cấu hình!</p>
+               <p className="font-medium text-xs opacity-80">Hãy điền URL và Anon Key vào file .env để kích hoạt đăng nhập.</p>
+            </div>
+          )}
+
           {/* Logo & Header */}
           <div className="text-center mb-10">
             <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center text-secondary mx-auto mb-6 shadow-xl shadow-primary/20 rotate-3">

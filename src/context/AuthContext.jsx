@@ -62,6 +62,7 @@ export const AuthProvider = ({ children }) => {
     signIn,
     signOut,
     user,
+    isConfigured: !!supabase,
   };
 
   return (

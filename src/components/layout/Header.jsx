@@ -133,7 +133,7 @@ const Header = () => {
 
         {/* Mobile Menu Drawer */}
         <div className={`fixed inset-0 top-[76px] bg-white z-40 transition-transform duration-500 md:hidden ${
-          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full pointer-events-none'
         }`}>
           <nav className="flex flex-col p-8 gap-6 text-center">
             {['Cửa hàng', 'Nam', 'Nữ', 'Sale'].map((item) => (
