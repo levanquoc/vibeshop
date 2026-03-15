@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
-import { ShoppingBag, User, Menu, X, Search } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ShoppingBag, User, Menu, X, Search, LogOut, Heart, Package } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCartStore } from '../../store/cartStore';
+import { useAuth } from '../../context/AuthContext';
 import CartDrawer from '../cart/CartDrawer';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const totalItems = useCartStore((state) => state.getTotalItems());
 
   useEffect(() => {
@@ -18,6 +22,12 @@ const Header = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleSignOut = async () => {
+    await signOut();
+    setIsUserMenuOpen(false);
+    navigate('/');
+  };
 
   return (
     <>
@@ -58,9 +68,47 @@ const Header = () => {
             <button className="p-2 hover:bg-slate-100 rounded-full transition-colors hidden sm:block">
               <Search size={22} className="text-primary/80" />
             </button>
-            <button className="p-2 hover:bg-slate-100 rounded-full transition-colors">
-              <User size={22} className="text-primary/80" />
-            </button>
+            
+            {/* User Account */}
+            <div className="relative">
+              <button 
+                onClick={() => user ? setIsUserMenuOpen(!isUserMenuOpen) : navigate('/login')}
+                className={`p-2 rounded-full transition-all flex items-center gap-2 ${user ? 'bg-slate-100 pr-4' : 'hover:bg-slate-100'}`}
+              >
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${user ? 'bg-primary text-secondary' : 'text-primary/80'}`}>
+                  <User size={user ? 18 : 22} />
+                </div>
+                {user && (
+                   <span className="text-sm font-black text-primary hidden lg:block">Hi, {user.user_metadata?.full_name?.split(' ')[0] || 'User'}</span>
+                )}
+              </button>
+
+              {/* User Dropdown */}
+              {user && isUserMenuOpen && (
+                <div className="absolute right-0 mt-4 w-64 bg-white rounded-[32px] shadow-2xl border border-slate-100 p-4 py-6 z-50 animate-in fade-in zoom-in duration-200">
+                  <div className="px-4 mb-6">
+                    <p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">Tài khoản</p>
+                    <p className="text-primary font-black truncate">{user.user_metadata?.full_name || user.email}</p>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <Link to="/orders" className="flex items-center gap-3 p-3 rounded-2xl hover:bg-slate-50 text-slate-600 font-bold transition-all">
+                       <Package size={18} /> Đơn hàng của tôi
+                    </Link>
+                    <Link to="/wishlist" className="flex items-center gap-3 p-3 rounded-2xl hover:bg-slate-50 text-slate-600 font-bold transition-all">
+                       <Heart size={18} /> Danh sách yêu thích
+                    </Link>
+                    <button 
+                      onClick={handleSignOut}
+                      className="w-full flex items-center gap-3 p-3 rounded-2xl hover:bg-red-50 text-red-500 font-bold transition-all"
+                    >
+                       <LogOut size={18} /> Đăng xuất
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
             <button 
               onClick={() => setIsCartOpen(true)}
               className="relative p-2 bg-primary text-white rounded-full hover:bg-primary-light transition-all shadow-lg shadow-primary/20"
@@ -94,8 +142,22 @@ const Header = () => {
               </a>
             ))}
             <div className="mt-8 pt-8 border-t border-slate-100 flex flex-col gap-4">
-               <button className="w-full py-4 bg-slate-100 rounded-2xl font-bold">Đăng nhập</button>
-               <button className="w-full py-4 bg-primary text-white rounded-2xl font-bold">Tạo tài khoản</button>
+               {user ? (
+                 <>
+                   <div className="mb-4">
+                     <p className="text-slate-400 font-bold">Chào mừng trở lại,</p>
+                     <p className="text-2xl font-black text-primary">{user.user_metadata?.full_name}</p>
+                   </div>
+                   <button onClick={handleSignOut} className="w-full py-5 bg-red-50 text-red-500 rounded-2xl font-black flex items-center justify-center gap-2">
+                     <LogOut size={20} /> Đăng xuất
+                   </button>
+                 </>
+               ) : (
+                 <>
+                   <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="w-full py-5 bg-slate-100 rounded-2xl font-black text-primary">Đăng nhập</Link>
+                   <Link to="/register" onClick={() => setIsMobileMenuOpen(false)} className="w-full py-5 bg-primary text-white rounded-2xl font-black">Tạo tài khoản</Link>
+                 </>
+               )}
             </div>
           </nav>
         </div>
