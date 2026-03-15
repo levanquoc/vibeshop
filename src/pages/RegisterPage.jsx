@@ -33,7 +33,7 @@ const RegisterPage = () => {
       setLoading(false);
     } else {
       // Registration successful
-      showToast('Đăng ký thành công! Vui lòng kiểm tra email để xác nhận tài khoản.', 'success');
+      showToast('Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.', 'success');
       navigate('/login');
     }
   };
