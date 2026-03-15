@@ -51,15 +51,20 @@ const Header = () => {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
-            {['Cửa hàng', 'Nam', 'Nữ', 'Sale'].map((item) => (
-              <a 
-                key={item} 
-                href="#" 
+            {[
+              { label: 'Cửa hàng', path: '/?category=all' },
+              { label: 'Nam', path: "/?category=men's clothing" },
+              { label: 'Nữ', path: "/?category=women's clothing" },
+              { label: 'Sale', path: '/?category=jewelery' },
+            ].map((item) => (
+              <Link 
+                key={item.label} 
+                to={item.path} 
                 className="text-[15px] font-semibold text-primary/70 hover:text-primary transition-colors relative group"
               >
-                {item}
+                {item.label}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all group-hover:w-full"></span>
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -136,10 +141,20 @@ const Header = () => {
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full pointer-events-none'
         }`}>
           <nav className="flex flex-col p-8 gap-6 text-center">
-            {['Cửa hàng', 'Nam', 'Nữ', 'Sale'].map((item) => (
-              <a key={item} href="#" className="text-3xl font-bold text-primary hover:text-secondary transition-colors">
-                {item}
-              </a>
+            {[
+              { label: 'Cửa hàng', path: '/?category=all' },
+              { label: 'Nam', path: "/?category=men's clothing" },
+              { label: 'Nữ', path: "/?category=women's clothing" },
+              { label: 'Sale', path: '/?category=jewelery' },
+            ].map((item) => (
+              <Link 
+                key={item.label} 
+                to={item.path} 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-3xl font-bold text-primary hover:text-secondary transition-colors"
+              >
+                {item.label}
+              </Link>
             ))}
             <div className="mt-8 pt-8 border-t border-slate-100 flex flex-col gap-4">
                {user ? (

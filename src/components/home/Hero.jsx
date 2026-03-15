@@ -23,7 +23,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative h-[85vh] flex items-center overflow-hidden">
+    <section className="relative h-[70vh] flex items-center overflow-hidden">
       {/* Background with Generated Asset */}
       <motion.div 
         initial={{ scale: 1.1, opacity: 0 }}
@@ -48,13 +48,13 @@ const Hero = () => {
         >
           <motion.span 
             variants={itemVariants}
-            className="inline-block px-4 py-1.5 bg-secondary/10 text-secondary-dark text-xs font-bold rounded-full mb-6 uppercase tracking-widest"
+            className="inline-block px-4 py-1 bg-secondary/10 text-secondary-dark text-[10px] font-bold rounded-full mb-4 uppercase tracking-widest"
           >
             Bộ sưu tập Mùa Xuân 2026
           </motion.span>
           <motion.h1 
             variants={itemVariants}
-            className="text-5xl md:text-8xl font-black text-primary leading-[1.1] mb-6 tracking-tight"
+            className="text-4xl md:text-6xl font-black text-primary leading-tight mb-4 tracking-tight"
           >
             Nâng Tầm <br /> 
             <span className="text-secondary">Phong Cách</span> <br /> 
@@ -62,29 +62,29 @@ const Hero = () => {
           </motion.h1>
           <motion.p 
             variants={itemVariants}
-            className="text-slate-600 text-lg mb-10 leading-relaxed font-medium"
+            className="text-slate-600 text-base mb-8 leading-relaxed font-medium"
           >
             Khám phá sự giao thoa giữa nghệ thuật và thời trang. Những thiết kế độc bản giúp bạn tự tin tỏa sáng mỗi ngày.
           </motion.p>
           
-          <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
-            <button className="flex items-center gap-2 bg-primary text-white px-10 py-5 rounded-2xl font-bold hover:bg-primary-light transition-all shadow-2xl shadow-primary/30 group">
-              Mua ngay <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+          <motion.div variants={itemVariants} className="flex flex-wrap gap-3">
+            <button className="flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-2xl font-bold hover:bg-primary-light transition-all shadow-xl shadow-primary/20 group text-sm">
+              Mua ngay <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="flex items-center gap-2 border-2 border-slate-200 bg-white/50 backdrop-blur-sm text-primary px-10 py-5 rounded-2xl font-bold hover:border-primary transition-all">
+            <button className="flex items-center gap-2 border-2 border-slate-200 bg-white/50 backdrop-blur-sm text-primary px-8 py-4 rounded-2xl font-bold hover:border-primary transition-all text-sm">
               Xem Catalog
             </button>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="mt-16 flex items-center gap-10">
+          <motion.div variants={itemVariants} className="mt-12 flex items-center gap-8">
             <div>
-              <p className="text-3xl font-black text-primary">50k+</p>
-              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Khách hàng</p>
+              <p className="text-2xl font-black text-primary">50k+</p>
+              <p className="text-[9px] text-slate-400 uppercase font-bold tracking-widest">Khách hàng</p>
             </div>
-            <div className="h-12 w-px bg-slate-200"></div>
+            <div className="h-10 w-px bg-slate-200"></div>
             <div>
-              <p className="text-3xl font-black text-primary">4.9/5</p>
-              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Đánh giá</p>
+              <p className="text-2xl font-black text-primary">4.9/5</p>
+              <p className="text-[9px] text-slate-400 uppercase font-bold tracking-widest">Đánh giá</p>
             </div>
           </motion.div>
         </motion.div>

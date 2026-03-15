@@ -1,16 +1,39 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import { getProducts, getCategories } from '../services/api';
 import Hero from '../components/home/Hero';
 import FeaturedCategories from '../components/home/FeaturedCategories';
 import ProductCard from '../components/products/ProductCard';
 import ProductSkeleton from '../components/products/ProductSkeleton';
 import FilterBar from '../components/products/FilterBar';
+import SEO from '../components/common/SEO';
 import { ShoppingBag } from 'lucide-react';
 
 const HomePage = () => {
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlCategory = searchParams.get('category') || 'all';
+  
+  const [selectedCategory, setSelectedCategory] = useState(urlCategory);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Sync state with URL when parameter changes
+  useEffect(() => {
+    setSelectedCategory(urlCategory);
+  }, [urlCategory]);
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    setSearchParams({ category });
+    
+    // Scroll to products section smoothly if we are filtering
+    if (category !== 'all') {
+      const shopSection = document.getElementById('shop');
+      if (shopSection) {
+        shopSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   // 1. Fetch Products
   const { data: products, isLoading, isError } = useQuery({
@@ -55,7 +78,7 @@ const HomePage = () => {
         <FilterBar 
           categories={categories}
           selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
+          onSelectCategory={handleCategoryChange}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
         />
