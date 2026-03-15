@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #0f172a;
+    --color-primary-light: #1e293b;
+    --color-secondary: #fbbf24;
+    --color-secondary-dark: #b45309;
+    --color-accent: #ef4444;
+  }
+
+  body {
+    @apply bg-slate-50 text-primary antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
