@@ -26,12 +26,12 @@ const HomePage = () => {
     setSelectedCategory(category);
     setSearchParams({ category });
     
-    // Scroll to products section smoothly if we are filtering
-    if (category !== 'all') {
-      const shopSection = document.getElementById('shop');
-      if (shopSection) {
+    // Always scroll to products section smoothly when a category/menu is selected
+    const shopSection = document.getElementById('shop');
+    if (shopSection) {
+      setTimeout(() => {
         shopSection.scrollIntoView({ behavior: 'smooth' });
-      }
+      }, 100);
     }
   };
 
@@ -60,8 +60,16 @@ const HomePage = () => {
 
   return (
     <>
-      <Hero />
-      <FeaturedCategories />
+      <SEO 
+        title="Trang Chủ" 
+        description="Chào mừng bạn đến với VibeShop - Nơi hội tụ thời trang đẳng cấp và phong cách sống hiện đại." 
+      />
+      
+      {/* Hero section with Compact mode for better visibility on filter */}
+      <Hero isCompact={selectedCategory !== 'all'} />
+      
+      {/* Hide featured categories when filtering to keep UI clean */}
+      {selectedCategory === 'all' && <FeaturedCategories />}
 
       <section className="py-24 bg-slate-50/50 min-h-screen" id="shop">
         <div className="container mx-auto px-6 mb-16">
