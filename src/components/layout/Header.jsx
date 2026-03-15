@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ShoppingBag, User, Menu, X, Search } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,14 +24,14 @@ const Header = () => {
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center gap-2 group cursor-pointer">
+        <Link to="/" className="flex items-center gap-2 group cursor-pointer">
           <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-secondary transition-transform group-hover:rotate-12">
             <ShoppingBag size={24} strokeWidth={2.5} />
           </div>
           <h1 className="text-2xl font-black tracking-tighter text-primary">
             Vibe<span className="text-secondary">Shop</span>
           </h1>
-        </div>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">

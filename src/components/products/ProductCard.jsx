@@ -1,8 +1,9 @@
 import { ShoppingBag, Eye, Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const ProductCard = ({ product }) => {
   return (
-    <div className="group cursor-pointer">
+    <Link to={`/product/${product.id}`} className="group cursor-pointer">
       {/* Image Container */}
       <div className="aspect-[3/4] bg-white rounded-[32px] mb-5 overflow-hidden relative shadow-sm border border-slate-50 flex items-center justify-center p-8">
         <img 
@@ -44,7 +45,7 @@ const ProductCard = ({ product }) => {
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
