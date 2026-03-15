@@ -58,7 +58,7 @@ const ProductCard = ({ product }) => {
             {product.name}
           </h3>
           <div className="flex items-center gap-3">
-            <p className="font-black text-xl text-primary">{product.price}</p>
+            <p className="font-black text-xl text-primary">${product.price}</p>
             {product.oldPrice && (
               <p className="text-slate-400 text-sm line-through font-medium">{product.oldPrice}</p>
             )}

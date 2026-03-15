@@ -122,7 +122,7 @@ const HomePage = () => {
                   product={{
                     ...product,
                     name: product.title,
-                    price: `$${product.price}`,
+                    price: product.price,
                     category: product.category,
                     isNew: product.id <= 4
                   }} 
