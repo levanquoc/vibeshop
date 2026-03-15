@@ -8,6 +8,13 @@ export const useCartStore = create(
       
       addToCart: (product) => {
         const currentCart = get().cart;
+        
+        // Sanitize price: ensure it's a number
+        const sanitizedPrice = typeof product.price === 'string'
+          ? parseFloat(product.price.replace(/[^0-9.-]+/g, ""))
+          : Number(product.price);
+
+        const sanitizedProduct = { ...product, price: sanitizedPrice };
         const existingItem = currentCart.find((item) => item.id === product.id);
 
         if (existingItem) {
@@ -19,7 +26,7 @@ export const useCartStore = create(
             ),
           });
         } else {
-          set({ cart: [...currentCart, { ...product, quantity: 1 }] });
+          set({ cart: [...currentCart, { ...sanitizedProduct, quantity: 1 }] });
         }
       },
 

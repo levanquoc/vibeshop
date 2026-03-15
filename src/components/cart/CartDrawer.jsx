@@ -85,7 +85,9 @@ const CartDrawer = ({ isOpen, onClose }) => {
                         <Plus size={14} />
                       </button>
                     </div>
-                    <p className="font-black text-primary">${(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-black text-primary">
+                      ${((typeof item.price === 'string' ? parseFloat(item.price.replace(/[^0-9.-]+/g, "")) : item.price) * item.quantity).toFixed(2)}
+                    </p>
                   </div>
                 </div>
               </div>

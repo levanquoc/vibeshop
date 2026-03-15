@@ -212,9 +212,13 @@ const CheckoutPage = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-bold text-sm truncate">{item.title}</h4>
-                      <p className="text-white/50 text-xs font-bold">SL: {item.quantity} x ${item.price}</p>
+                      <p className="text-white/50 text-xs font-bold">
+                        SL: {item.quantity} x ${typeof item.price === 'string' ? item.price.replace(/[^0-9.-]+/g, "") : item.price}
+                      </p>
                     </div>
-                    <p className="font-black text-secondary">${(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-black text-secondary">
+                      ${((typeof item.price === 'string' ? parseFloat(item.price.replace(/[^0-9.-]+/g, "")) : item.price) * item.quantity).toFixed(2)}
+                    </p>
                   </div>
                 ))}
               </div>
