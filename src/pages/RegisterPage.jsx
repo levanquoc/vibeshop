@@ -25,7 +25,11 @@ const RegisterPage = () => {
     const { error } = await signUp(email, password, { full_name: fullName });
 
     if (error) {
-      setError(error.message);
+      if (error.message.includes('rate limit')) {
+        setError('Hệ thống đang tạm thời giới hạn gửi email (tối đa 3 email/giờ). Vui lòng thử lại sau hoặc liên hệ Admin để tắt tính năng xác nhận email.');
+      } else {
+        setError(error.message);
+      }
       setLoading(false);
     } else {
       // Registration successful
