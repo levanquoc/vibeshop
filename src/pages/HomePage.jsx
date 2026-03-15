@@ -13,18 +13,29 @@ import { ShoppingBag } from 'lucide-react';
 const HomePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const urlCategory = searchParams.get('category') || 'all';
+  const urlSort = searchParams.get('sort') || 'featured';
+  const urlMinPrice = searchParams.get('min') || '';
+  const urlMaxPrice = searchParams.get('max') || '';
   
   const [selectedCategory, setSelectedCategory] = useState(urlCategory);
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState(urlSort);
+  const [minPrice, setMinPrice] = useState(urlMinPrice);
+  const [maxPrice, setMaxPrice] = useState(urlMaxPrice);
 
-  // Sync state with URL when parameter changes
+  // Sync state with URL when parameters change
   useEffect(() => {
     setSelectedCategory(urlCategory);
-  }, [urlCategory]);
+    setSortBy(urlSort);
+    setMinPrice(urlMinPrice);
+    setMaxPrice(urlMaxPrice);
+  }, [urlCategory, urlSort, urlMinPrice, urlMaxPrice]);
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    setSearchParams({ category });
+    const newParams = Object.fromEntries(searchParams.entries());
+    newParams.category = category;
+    setSearchParams(newParams);
     
     // Always scroll to products section smoothly when a category/menu is selected
     const shopSection = document.getElementById('shop');
@@ -33,6 +44,27 @@ const HomePage = () => {
         shopSection.scrollIntoView({ behavior: 'smooth' });
       }, 100);
     }
+  };
+
+  const handleSortChange = (sort) => {
+    setSortBy(sort);
+    const newParams = Object.fromEntries(searchParams.entries());
+    newParams.sort = sort;
+    setSearchParams(newParams);
+  };
+
+  const handlePriceChange = (type, value) => {
+    const newParams = Object.fromEntries(searchParams.entries());
+    if (type === 'min') {
+      setMinPrice(value);
+      if (value) newParams.min = value;
+      else delete newParams.min;
+    } else {
+      setMaxPrice(value);
+      if (value) newParams.max = value;
+      else delete newParams.max;
+    }
+    setSearchParams(newParams);
   };
 
   // 1. Fetch Products
@@ -47,16 +79,39 @@ const HomePage = () => {
     queryFn: getCategories,
   });
 
-  // 3. Filter Logic
+  // 3. Advanced Filter & Sort Logic
   const filteredProducts = useMemo(() => {
     if (!products) return [];
     
-    return products.filter((product) => {
+    let result = products.filter((product) => {
       const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
       const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
+      
+      const price = Number(product.price);
+      const matchesMinPrice = minPrice === '' || price >= Number(minPrice);
+      const matchesMaxPrice = maxPrice === '' || price <= Number(maxPrice);
+      
+      return matchesCategory && matchesSearch && matchesMinPrice && matchesMaxPrice;
     });
-  }, [products, selectedCategory, searchQuery]);
+
+    // Apply Sorting
+    switch (sortBy) {
+      case 'price-low-high':
+        result.sort((a, b) => Number(a.price) - Number(b.price));
+        break;
+      case 'price-high-low':
+        result.sort((a, b) => Number(b.price) - Number(a.price));
+        break;
+      case 'rating':
+        result.sort((a, b) => (b.rating?.rate || 0) - (a.rating?.rate || 0));
+        break;
+      default:
+        // 'featured' - Keep original order or apply custom logic
+        break;
+    }
+
+    return result;
+  }, [products, selectedCategory, searchQuery, sortBy, minPrice, maxPrice]);
 
   return (
     <>
@@ -89,6 +144,11 @@ const HomePage = () => {
           onSelectCategory={handleCategoryChange}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          sortBy={sortBy}
+          onSortChange={handleSortChange}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          onPriceChange={handlePriceChange}
         />
         
         <div className="container mx-auto px-6">
@@ -108,7 +168,14 @@ const HomePage = () => {
                <h3 className="text-2xl font-black text-primary mb-2">Không tìm thấy sản phẩm</h3>
                <p className="text-slate-400">Bạn thử tìm kiếm với từ khóa khác hoặc lọc theo danh mục khác nhé!</p>
                <button 
-                  onClick={() => {setSearchQuery(''); setSelectedCategory('all');}}
+                  onClick={() => {
+                    setSearchQuery(''); 
+                    setSelectedCategory('all');
+                    setSortBy('featured');
+                    setMinPrice('');
+                    setMaxPrice('');
+                    setSearchParams({});
+                  }}
                   className="mt-8 text-secondary font-bold hover:underline"
                >
                  Xóa tất cả bộ lọc
