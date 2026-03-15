@@ -1,7 +1,16 @@
 import { ShoppingBag, Eye, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useCartStore } from '../../store/cartStore';
 
 const ProductCard = ({ product }) => {
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  const handleAddToCart = (e) => {
+    e.preventDefault(); // Stop navigation to detail page
+    e.stopPropagation();
+    addToCart(product);
+  };
+
   return (
     <Link to={`/product/${product.id}`} className="group cursor-pointer">
       {/* Image Container */}
@@ -23,7 +32,10 @@ const ProductCard = ({ product }) => {
         <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
         
         <div className="absolute bottom-6 left-6 right-6 flex gap-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-75">
-          <button className="flex-1 bg-primary text-white py-3.5 rounded-2xl font-bold text-sm shadow-xl shadow-primary/20 hover:bg-primary-light flex items-center justify-center gap-2">
+          <button 
+            onClick={handleAddToCart}
+            className="flex-1 bg-primary text-white py-3.5 rounded-2xl font-bold text-sm shadow-xl shadow-primary/20 hover:bg-primary-light flex items-center justify-center gap-2"
+          >
             <ShoppingBag size={18} /> Thêm vào giỏ
           </button>
           <button className="w-12 h-12 bg-white text-primary rounded-2xl flex items-center justify-center shadow-lg hover:bg-secondary transition-colors">

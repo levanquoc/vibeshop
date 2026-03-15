@@ -2,10 +2,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getProductById } from '../services/api';
 import { ShoppingBag, ArrowLeft, Heart, Star, ShieldCheck, Truck } from 'lucide-react';
+import { useCartStore } from '../store/cartStore';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const addToCart = useCartStore((state) => state.addToCart);
 
   const { data: product, isLoading, isError } = useQuery({
     queryKey: ['product', id],
@@ -99,7 +101,10 @@ const ProductDetailPage = () => {
           </div>
 
           <div className="flex flex-wrap gap-4 mt-auto">
-            <button className="flex-1 bg-primary text-white px-10 py-5 rounded-2xl font-black hover:bg-primary-light transition-all shadow-xl shadow-primary/20 flex items-center justify-center gap-3 group">
+            <button 
+              onClick={() => addToCart(product)}
+              className="flex-1 bg-primary text-white px-10 py-5 rounded-2xl font-black hover:bg-primary-light transition-all shadow-xl shadow-primary/20 flex items-center justify-center gap-3 group"
+            >
               <ShoppingBag size={20} className="group-hover:scale-110 transition-transform" /> 
               Thêm vào giỏ hàng
             </button>
