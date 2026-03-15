@@ -97,10 +97,18 @@ const Header = () => {
                   </div>
                   
                   <div className="space-y-1">
-                    <Link to="/orders" className="flex items-center gap-3 p-3 rounded-2xl hover:bg-slate-50 text-slate-600 font-bold transition-all">
+                    <Link 
+                      to="/orders" 
+                      onClick={() => { setIsUserMenuOpen(false); setIsMobileMenuOpen(false); }}
+                      className="flex items-center gap-3 p-3 rounded-2xl hover:bg-slate-50 text-slate-600 font-bold transition-all"
+                    >
                        <Package size={18} /> Đơn hàng của tôi
                     </Link>
-                    <Link to="/wishlist" className="flex items-center gap-3 p-3 rounded-2xl hover:bg-slate-50 text-slate-600 font-bold transition-all">
+                    <Link 
+                      to="/wishlist" 
+                      onClick={() => { setIsUserMenuOpen(false); setIsMobileMenuOpen(false); }}
+                      className="flex items-center gap-3 p-3 rounded-2xl hover:bg-slate-50 text-slate-600 font-bold transition-all"
+                    >
                        <Heart size={18} /> Danh sách yêu thích
                     </Link>
                     <button 
