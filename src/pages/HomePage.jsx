@@ -1,42 +1,91 @@
+import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getProducts } from '../services/api';
+import { getProducts, getCategories } from '../services/api';
 import Hero from '../components/home/Hero';
 import FeaturedCategories from '../components/home/FeaturedCategories';
 import ProductCard from '../components/products/ProductCard';
 import ProductSkeleton from '../components/products/ProductSkeleton';
+import FilterBar from '../components/products/FilterBar';
+import { ShoppingBag } from 'lucide-react';
 
 const HomePage = () => {
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // 1. Fetch Products
   const { data: products, isLoading, isError } = useQuery({
     queryKey: ['products'],
     queryFn: getProducts,
   });
+
+  // 2. Fetch Categories
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: getCategories,
+  });
+
+  // 3. Filter Logic
+  const filteredProducts = useMemo(() => {
+    if (!products) return [];
+    
+    return products.filter((product) => {
+      const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+      const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [products, selectedCategory, searchQuery]);
 
   return (
     <>
       <Hero />
       <FeaturedCategories />
 
-      <section className="py-24 bg-slate-50/50">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-4">
-            <div>
-              <span className="text-secondary font-bold text-xs uppercase tracking-widest mb-2 block">Cửa hàng của chúng tôi</span>
-              <h2 className="text-4xl font-black text-primary mb-2 tracking-tight">
-                Sản Phẩm <span className="text-secondary text-stroke-primary">Nổi Bật</span>
-              </h2>
-              <p className="text-slate-500 max-w-md">Lựa chọn những thiết kế tinh xảo nhất cho phong cách của bạn.</p>
-            </div>
+      <section className="py-24 bg-slate-50/50 min-h-screen" id="shop">
+        <div className="container mx-auto px-6 mb-16">
+          <div className="max-w-xl">
+            <span className="text-secondary font-bold text-xs uppercase tracking-widest mb-2 block">Cửa hàng của chúng tôi</span>
+            <h2 className="text-4xl md:text-5xl font-black text-primary mb-2 tracking-tight">
+              Sản Phẩm <span className="text-secondary text-stroke-primary">Nổi Bật</span>
+            </h2>
+            <p className="text-slate-500 font-medium">Lựa chọn những thiết kế tinh xảo nhất cho phong cách của bạn.</p>
           </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
-            {isLoading ? (
-              Array.from({ length: 8 }).map((_, i) => <ProductSkeleton key={i} />)
-            ) : isError ? (
-              <div className="text-center py-20 w-full col-span-full">
-                <p className="text-red-500 font-bold">Không thể tải sản phẩm. Vui lòng thử lại sau.</p>
-              </div>
-            ) : (
-              products?.slice(0, 8).map((product) => (
+        </div>
+
+        {/* Search & Filter Bar */}
+        <FilterBar 
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+        />
+        
+        <div className="container mx-auto px-6">
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+              {Array.from({ length: 8 }).map((_, i) => <ProductSkeleton key={i} />)}
+            </div>
+          ) : isError ? (
+            <div className="text-center py-20 w-full">
+              <p className="text-red-500 font-bold">Không thể tải sản phẩm. Vui lòng thử lại sau.</p>
+            </div>
+          ) : filteredProducts.length === 0 ? (
+            <div className="text-center py-32 bg-white rounded-[48px] border border-dashed border-slate-200">
+               <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <ShoppingBag className="text-slate-300" size={40} />
+               </div>
+               <h3 className="text-2xl font-black text-primary mb-2">Không tìm thấy sản phẩm</h3>
+               <p className="text-slate-400">Bạn thử tìm kiếm với từ khóa khác hoặc lọc theo danh mục khác nhé!</p>
+               <button 
+                  onClick={() => {setSearchQuery(''); setSelectedCategory('all');}}
+                  className="mt-8 text-secondary font-bold hover:underline"
+               >
+                 Xóa tất cả bộ lọc
+               </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+              {filteredProducts.map((product) => (
                 <ProductCard 
                   key={product.id} 
                   product={{
@@ -47,9 +96,9 @@ const HomePage = () => {
                     isNew: product.id <= 4
                   }} 
                 />
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>
