@@ -83,41 +83,41 @@ const FilterBar = ({
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col md:flex-row items-center justify-between gap-6 pt-6 border-t border-slate-100"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 pt-6 border-t border-slate-100"
         >
           {/* Sorting Dropdown */}
-          <div className="flex items-center gap-4 w-full md:w-auto">
-            <span className="text-sm font-black text-primary/40 uppercase tracking-widest whitespace-nowrap">Sắp xếp:</span>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 flex-1">
+            <span className="text-[10px] font-black text-primary/40 uppercase tracking-widest whitespace-nowrap ml-1">Sắp xếp theo</span>
             <select 
               value={sortBy}
               onChange={(e) => onSortChange(e.target.value)}
-              className="bg-white border border-slate-100 px-6 py-3 rounded-xl font-bold text-sm text-primary focus:outline-none focus:border-secondary transition-all cursor-pointer flex-1 md:flex-none"
+              className="w-full sm:w-auto bg-white border border-slate-100 px-5 py-3.5 rounded-2xl font-bold text-sm text-primary focus:outline-none focus:border-secondary transition-all cursor-pointer shadow-sm appearance-none"
             >
-              <option value="featured">Nổi bật</option>
-              <option value="price-low-high">Giá: Thấp đến Cao</option>
-              <option value="price-high-low">Giá: Cao đến Thấp</option>
-              <option value="rating">Đánh giá cao nhất</option>
+              <option value="featured">✨ Nổi bật nhất</option>
+              <option value="price-low-high">💰 Giá: Thấp đến Cao</option>
+              <option value="price-high-low">💎 Giá: Cao đến Thấp</option>
+              <option value="rating">⭐️ Đánh giá cao nhất</option>
             </select>
           </div>
 
           {/* Price Range Inputs */}
-          <div className="flex items-center gap-4 w-full md:w-auto">
-            <span className="text-sm font-black text-primary/40 uppercase tracking-widest whitespace-nowrap">Giá ($):</span>
-            <div className="flex items-center gap-2 flex-1 md:flex-none">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 flex-1 justify-end">
+            <span className="text-[10px] font-black text-primary/40 uppercase tracking-widest whitespace-nowrap ml-1">Khoảng giá ($)</span>
+            <div className="flex items-center gap-2 w-full sm:w-auto">
               <input 
                 type="number" 
-                placeholder="Min"
+                placeholder="Từ"
                 value={minPrice}
                 onChange={(e) => onPriceChange('min', e.target.value)}
-                className="w-full md:w-24 bg-white border border-slate-100 px-4 py-3 rounded-xl font-bold text-sm text-primary focus:outline-none focus:border-secondary transition-all"
+                className="w-full sm:w-24 bg-white border border-slate-100 px-4 py-3.5 rounded-2xl font-bold text-sm text-primary focus:outline-none focus:border-secondary transition-all shadow-sm"
               />
-              <span className="text-slate-300">-</span>
+              <span className="text-slate-300 font-bold">-</span>
               <input 
                 type="number" 
-                placeholder="Max"
+                placeholder="Đến"
                 value={maxPrice}
                 onChange={(e) => onPriceChange('max', e.target.value)}
-                className="w-full md:w-24 bg-white border border-slate-100 px-4 py-3 rounded-xl font-bold text-sm text-primary focus:outline-none focus:border-secondary transition-all"
+                className="w-full sm:w-24 bg-white border border-slate-100 px-4 py-3.5 rounded-2xl font-bold text-sm text-primary focus:outline-none focus:border-secondary transition-all shadow-sm"
               />
             </div>
           </div>

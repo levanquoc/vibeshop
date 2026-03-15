@@ -59,17 +59,17 @@ const FeaturedCategories = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 h-[600px] md:h-[700px]"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-8"
       >
         {/* Large Category */}
-        <div className="md:col-span-2 lg:col-span-1 h-full">
+        <div className="lg:col-span-1 h-[400px] md:h-[500px] lg:h-[700px]">
            <CategoryCard category={categories[0]} />
         </div>
         
         {/* Two Small Categories Stacked */}
-        <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
-           <div className="h-full"><CategoryCard category={categories[1]} /></div>
-           <div className="h-full"><CategoryCard category={categories[2]} /></div>
+        <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
+           <div className="h-[350px] md:h-[500px] lg:h-[700px]"><CategoryCard category={categories[1]} /></div>
+           <div className="h-[350px] md:h-[500px] lg:h-[700px]"><CategoryCard category={categories[2]} /></div>
         </div>
       </motion.div>
     </section>
