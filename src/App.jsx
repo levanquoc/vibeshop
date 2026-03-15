@@ -1,42 +1,17 @@
+import { useQuery } from '@tanstack/react-query';
+import { getProducts } from './services/api';
 import MainLayout from './components/layout/MainLayout';
 import Hero from './components/home/Hero';
 import FeaturedCategories from './components/home/FeaturedCategories';
 import ProductCard from './components/products/ProductCard';
-
-const SAMPLE_PRODUCTS = [
-  {
-    id: 1,
-    name: "Classic Navy Blazer",
-    category: "Menswear",
-    price: "$299.00",
-    oldPrice: "$350.00",
-    isNew: true
-  },
-  {
-    id: 2,
-    name: "Golden Silk Evening Dress",
-    category: "Womenswear",
-    price: "$450.00",
-    isNew: true
-  },
-  {
-    id: 3,
-    name: "Premium Leather Timepiece",
-    category: "Accessories",
-    price: "$199.00",
-    oldPrice: "$250.00",
-    isNew: false
-  },
-  {
-    id: 4,
-    name: "Minimalist Wool Overcoat",
-    category: "Menswear",
-    price: "$399.00",
-    isNew: false
-  }
-];
+import { Loader2 } from 'lucide-react';
 
 function App() {
+  const { data: products, isLoading, isError } = useQuery({
+    queryKey: ['products'],
+    queryFn: getProducts,
+  });
+
   return (
     <MainLayout>
       {/* 1. Hero Section */}
@@ -59,11 +34,31 @@ function App() {
             </button>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
-            {SAMPLE_PRODUCTS.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-20 w-full col-span-full">
+              <Loader2 className="animate-spin text-secondary mb-4" size={48} />
+              <p className="text-slate-400 font-bold animate-pulse">Đang tải bộ sưu tập mới...</p>
+            </div>
+          ) : isError ? (
+            <div className="text-center py-20 w-full col-span-full">
+              <p className="text-red-500 font-bold">Không thể tải sản phẩm. Vui lòng thử lại sau.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+              {products?.slice(0, 8).map((product) => (
+                <ProductCard 
+                  key={product.id} 
+                  product={{
+                    ...product,
+                    name: product.title,
+                    price: `$${product.price}`,
+                    category: product.category,
+                    isNew: product.id <= 4 // Mark first 4 as new
+                  }} 
+                />
+              ))}
+            </div>
+          )}
 
           {/* Luxury Banner */}
           <div className="mt-24 p-12 md:p-20 rounded-[48px] bg-primary relative overflow-hidden text-center">

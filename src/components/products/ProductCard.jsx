@@ -4,11 +4,12 @@ const ProductCard = ({ product }) => {
   return (
     <div className="group cursor-pointer">
       {/* Image Container */}
-      <div className="aspect-[3/4] bg-slate-100 rounded-[32px] mb-5 overflow-hidden relative shadow-sm border border-slate-50">
-        {/* Image Placeholder with Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
-           <ShoppingBag size={48} className="text-slate-300 group-hover:scale-110 transition-transform duration-500" />
-        </div>
+      <div className="aspect-[3/4] bg-white rounded-[32px] mb-5 overflow-hidden relative shadow-sm border border-slate-50 flex items-center justify-center p-8">
+        <img 
+          src={product.image} 
+          alt={product.name} 
+          className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110"
+        />
         
         {/* Badges */}
         {product.isNew && (
