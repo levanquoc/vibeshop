@@ -23,6 +23,13 @@ const CartPage = () => {
     );
   }
 
+  // Defensive sanitization: Clean up any "bad" data that might be in the cart from previous sessions
+  const sanitizeValue = (val) => {
+    if (typeof val === 'number') return val;
+    if (typeof val === 'string') return parseFloat(val.replace(/[^0-9.-]+/g, "")) || 0;
+    return 0;
+  };
+
   return (
     <div className="min-h-screen pt-32 pb-20 bg-slate-50/50">
       <div className="container mx-auto px-6">
@@ -66,7 +73,9 @@ const CartPage = () => {
                       </button>
                     </div>
 
-                    <p className="text-2xl font-black text-primary">${(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="text-2xl font-black text-primary">
+                      ${(sanitizeValue(item.price) * item.quantity).toFixed(2)}
+                    </p>
                   </div>
                 </div>
 
