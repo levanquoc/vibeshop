@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ShoppingBag, User, Menu, X, Search, LogOut, Heart, Package } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCartStore } from '../../store/cartStore';
+import { useWishlistStore } from '../../store/wishlistStore';
 import { useAuth } from '../../context/AuthContext';
 import CartDrawer from '../cart/CartDrawer';
 
@@ -14,6 +15,7 @@ const Header = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const totalItems = useCartStore((state) => state.getTotalItems());
+  const wishlistCount = useWishlistStore((state) => state.wishlist.length);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -107,9 +109,16 @@ const Header = () => {
                     <Link 
                       to="/wishlist" 
                       onClick={() => { setIsUserMenuOpen(false); setIsMobileMenuOpen(false); }}
-                      className="flex items-center gap-3 p-3 rounded-2xl hover:bg-slate-50 text-slate-600 font-bold transition-all"
+                      className="flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 text-slate-600 font-bold transition-all"
                     >
-                       <Heart size={18} /> Danh sách yêu thích
+                       <div className="flex items-center gap-3">
+                         <Heart size={18} /> Danh sách yêu thích
+                       </div>
+                       {wishlistCount > 0 && (
+                         <span className="bg-red-50 text-red-500 text-[10px] px-2 py-0.5 rounded-full border border-red-100 italic">
+                           {wishlistCount}
+                         </span>
+                       )}
                     </Link>
                     <button 
                       onClick={handleSignOut}

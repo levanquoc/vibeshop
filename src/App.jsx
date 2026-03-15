@@ -12,6 +12,8 @@ const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const OrdersPage = lazy(() => import('./pages/OrdersPage'));
+const WishlistPage = lazy(() => import('./pages/WishlistPage'));
+import ToastContainer from './components/common/ToastContainer';
 
 // Loading component for Suspense
 const PageLoader = () => (
@@ -33,6 +35,7 @@ const AnimatedRoutes = () => {
           <Route path="/login" element={<PageTransition><LoginPage /></PageTransition>} />
           <Route path="/register" element={<PageTransition><RegisterPage /></PageTransition>} />
           <Route path="/orders" element={<PageTransition><OrdersPage /></PageTransition>} />
+          <Route path="/wishlist" element={<PageTransition><WishlistPage /></PageTransition>} />
         </Routes>
       </Suspense>
     </AnimatePresence>
@@ -42,6 +45,7 @@ const AnimatedRoutes = () => {
 function App() {
   return (
     <Router>
+      <ToastContainer />
       <MainLayout>
         <AnimatedRoutes />
       </MainLayout>

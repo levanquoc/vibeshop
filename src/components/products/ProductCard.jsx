@@ -1,15 +1,33 @@
-import { ShoppingBag, Eye, Heart } from 'lucide-react';
+import { ShoppingBag, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCartStore } from '../../store/cartStore';
+import { useWishlistStore } from '../../store/wishlistStore';
+import { useToastStore } from '../../store/toastStore';
 import { motion } from 'framer-motion';
 
 const ProductCard = ({ product }) => {
   const addToCart = useCartStore((state) => state.addToCart);
+  const { toggleWishlist, isInWishlist } = useWishlistStore();
+  const showToast = useToastStore((state) => state.showToast);
+  
+  const isWishlisted = isInWishlist(product.id);
 
   const handleAddToCart = (e) => {
-    e.preventDefault(); // Stop navigation to detail page
+    e.preventDefault(); 
     e.stopPropagation();
     addToCart(product);
+    showToast(`Đã thêm ${product.name} vào giỏ hàng!`);
+  };
+
+  const handleToggleWishlist = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const added = toggleWishlist(product);
+    if (added) {
+      showToast(`Đã thêm ${product.name} vào danh sách yêu thích! 💖`);
+    } else {
+      showToast(`Đã xóa ${product.name} khỏi danh sách yêu thích.`, 'info');
+    }
   };
 
   return (
@@ -45,8 +63,15 @@ const ProductCard = ({ product }) => {
             >
               <ShoppingBag size={18} /> Thêm vào giỏ
             </button>
-            <button className="w-12 h-12 bg-white text-primary rounded-2xl flex items-center justify-center shadow-lg hover:bg-secondary transition-colors">
-              <Heart size={20} />
+            <button 
+              onClick={handleToggleWishlist}
+              className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg transition-all active:scale-90 ${
+                isWishlisted 
+                  ? 'bg-red-500 text-white' 
+                  : 'bg-white text-primary hover:bg-secondary'
+              }`}
+            >
+              <Heart size={20} fill={isWishlisted ? "currentColor" : "none"} strokeWidth={isWishlisted ? 0 : 2.5} />
             </button>
           </div>
         </div>
