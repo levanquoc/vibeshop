@@ -8,7 +8,15 @@ import { useNavigate, Link } from 'react-router-dom';
 import { CreditCard, Truck, ShieldCheck, ArrowLeft, CheckCircle2, ShoppingBag } from 'lucide-react';
 import { useState } from 'react';
 
-// ... (schema code remains same)
+// Validation Schema
+const schema = yup.object({
+  fullName: yup.string().required('Vui lòng nhập họ và tên'),
+  email: yup.string().email('Email không hợp lệ').required('Vui lòng nhập email'),
+  phone: yup.string().required('Vui lòng nhập số điện thoại').matches(/^[0-9]+$/, 'Số điện thoại không hợp lệ'),
+  address: yup.string().required('Vui lòng nhập địa chỉ giao hàng'),
+  city: yup.string().required('Vui lòng chọn tỉnh/thành phố'),
+  paymentMethod: yup.string().oneOf(['cod', 'bank'], 'Vui lòng chọn phương thức thanh toán').required(),
+}).required();
 
 const CheckoutPage = () => {
   const { cart, getTotalPrice, clearCart } = useCartStore();
