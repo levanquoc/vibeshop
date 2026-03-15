@@ -7,6 +7,7 @@ import { createOrder } from '../services/orderService';
 import { useNavigate, Link } from 'react-router-dom';
 import { CreditCard, Truck, ShieldCheck, ArrowLeft, CheckCircle2, ShoppingBag } from 'lucide-react';
 import { useState } from 'react';
+import { useToastStore } from '../store/toastStore';
 
 // Validation Schema
 const schema = yup.object({
@@ -33,6 +34,8 @@ const CheckoutPage = () => {
     }
   });
 
+  const showToast = useToastStore((state) => state.showToast);
+
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     
@@ -43,20 +46,22 @@ const CheckoutPage = () => {
       phone: data.phone,
       address: data.address,
       city: data.city,
-      total_price: getTotalPrice(),
+      total_price: Number(getTotalPrice()),
       payment_method: data.paymentMethod,
     };
 
     const { data: order, error } = await createOrder(orderData, cart);
 
     if (error) {
-      alert('Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại.');
+      console.error('Checkout Error:', error);
+      showToast(error.message || 'Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại.', 'error');
       setIsSubmitting(false);
     } else {
       setOrderId(order.id);
       setIsSuccess(true);
       clearCart();
       setIsSubmitting(false);
+      showToast('Đặt hàng thành công! 🛍️✨', 'success');
     }
   };
 
