@@ -108,9 +108,12 @@ const CartPage = () => {
                 </div>
               </div>
 
-              <button className="w-full bg-secondary text-primary py-5 rounded-2xl font-black text-lg hover:bg-white transition-all shadow-xl flex items-center justify-center gap-3 active:scale-95 duration-75">
+              <Link 
+                to="/checkout"
+                className="w-full bg-secondary text-primary py-5 rounded-2xl font-black text-lg hover:bg-white transition-all shadow-xl flex items-center justify-center gap-3 active:scale-95 duration-75"
+              >
                 <CreditCard size={22} /> Thanh toán ngay
-              </button>
+              </Link>
 
               <div className="mt-8 flex items-center justify-center gap-4 opacity-50 grayscale contrast-125">
                  {/* Placeholders for payment icons */}
